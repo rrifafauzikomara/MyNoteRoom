@@ -4,11 +4,11 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 import com.rifafauzi.mynoteroom.database.Note;
 import com.rifafauzi.mynoteroom.repository.NoteRepository;
-
-import java.util.List;
 
 public class MainViewModel extends ViewModel {
 
@@ -18,7 +18,7 @@ public class MainViewModel extends ViewModel {
         mNoteRepository = new NoteRepository(application);
     }
 
-    public LiveData<List<Note>> getAllNotes() {
-        return mNoteRepository.getAllNotes();
+    public LiveData<PagedList<Note>> getAllNotes() {
+        return new LivePagedListBuilder<>(mNoteRepository.getAllNotes(), 20).build();
     }
 }

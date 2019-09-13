@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,12 +16,10 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.rifafauzi.mynoteroom.R;
-import com.rifafauzi.mynoteroom.adapter.NoteAdapter;
+import com.rifafauzi.mynoteroom.adapter.NotePagedListAdapter;
 import com.rifafauzi.mynoteroom.database.Note;
 import com.rifafauzi.mynoteroom.viewmodel.MainViewModel;
 import com.rifafauzi.mynoteroom.viewmodel.ViewModelFactory;
-
-import java.util.List;
 
 import static com.rifafauzi.mynoteroom.ui.NoteAddUpdateActivity.REQUEST_UPDATE;
 
@@ -28,16 +27,17 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
 
-    private NoteAdapter adapter;
+    private NotePagedListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         MainViewModel mainViewModel = obtainViewModel(MainActivity.this);
         mainViewModel.getAllNotes().observe(this, noteObserver);
 
-        adapter = new NoteAdapter(MainActivity.this);
+        adapter = new NotePagedListAdapter(MainActivity.this);
 
         recyclerView = findViewById(R.id.rv_notes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private final Observer<List<Note>> noteObserver = new Observer<List<Note>>() {
+    private final Observer<PagedList<Note>> noteObserver = new Observer<PagedList<Note>>() {
         @Override
-        public void onChanged(@Nullable List<Note> noteList) {
+        public void onChanged(@Nullable PagedList<Note> noteList) {
             if (noteList != null) {
-                adapter.setListNotes(noteList);
+                adapter.submitList(noteList);
             }
         }
     };

@@ -2,13 +2,12 @@ package com.rifafauzi.mynoteroom.repository;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 
 import com.rifafauzi.mynoteroom.database.Note;
 import com.rifafauzi.mynoteroom.database.NoteDao;
 import com.rifafauzi.mynoteroom.database.NoteDatabase;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +22,7 @@ public class NoteRepository {
         mNotesDao = db.noteDao();
     }
 
-    public LiveData<List<Note>> getAllNotes() {
+    public DataSource.Factory<Integer, Note> getAllNotes() {
         return mNotesDao.getAllNotes();
     }
 
